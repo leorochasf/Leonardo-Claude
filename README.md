@@ -56,7 +56,7 @@ terminal na primeira vez). Este pack não fala com o NotebookLM direto — ele o
 ### Opção A — como plugin (Git / marketplace)
 
 ```
-/plugin marketplace add <url-do-repositorio-git>
+/plugin marketplace add https://github.com/leorochasf/Leonardo-Claude
 /plugin install notebooklm-rodadas
 ```
 

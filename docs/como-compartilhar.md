@@ -18,7 +18,7 @@ A pessoa instala com dois comandos e recebe atualizações via `git pull`.
    git add .
    git commit -m "NotebookLM Rodadas v1.0.0"
    git branch -M main
-   git remote add origin https://github.com/<você>/notebooklm-rodadas.git
+   git remote add origin https://github.com/leorochasf/Leonardo-Claude.git
    git push -u origin main
    ```
 
@@ -28,7 +28,7 @@ A pessoa instala com dois comandos e recebe atualizações via `git pull`.
 ### Como o destinatário instala
 
 ```
-/plugin marketplace add https://github.com/<você>/notebooklm-rodadas
+/plugin marketplace add https://github.com/leorochasf/Leonardo-Claude
 /plugin install notebooklm-rodadas
 ```
 
