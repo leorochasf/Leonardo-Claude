@@ -1,0 +1,9 @@
+{
+  "name": "notebooklm-rodadas",
+  "description": "Extração de contexto iterativa do Google NotebookLM em rodadas guiadas. /contexto-perfeito orquestra rodada 0 + rodadas dirigidas adaptativas até o contexto saturar, salvando tudo num único .md. Requer a skill notebooklm.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Leonardo Rocha",
+    "url": "https://github.com/leorochasf"
+  }
+}

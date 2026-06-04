@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>NotebookLM Rodadas — Guia de Instalação e Uso</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  :root {
+    --bg: #0b0d10; --panel: #14181d; --line: #232a31;
+    --ink: #e9edf1; --muted: #9aa6b2; --accent: #5b8cff; --accent2: #7be0c2;
+  }
+  html { background: var(--bg); }
+  body {
+    font-family: -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+    color: var(--ink); background: var(--bg);
+    font-size: 10.5pt; line-height: 1.55; letter-spacing: .1px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+  .eyebrow { font-size: 8pt; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); font-weight: 600; }
+  h1 { font-size: 24pt; line-height: 1.1; margin: 8px 0 6px; letter-spacing: -.5px; }
+  .sub { color: var(--muted); font-size: 11pt; max-width: 90%; }
+  h2 { font-size: 13pt; margin: 22px 0 8px; letter-spacing: -.2px; display: flex; align-items: baseline; gap: 8px; }
+  h2 .n { color: var(--accent); font-size: 10pt; font-variant-numeric: tabular-nums; }
+  p { color: var(--ink); margin: 6px 0; }
+  .muted { color: var(--muted); }
+  .flow {
+    display: flex; align-items: stretch; gap: 6px; margin: 12px 0 4px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+  }
+  .node { flex: 1; text-align: center; padding: 8px 6px; }
+  .node .t { font-size: 9.5pt; font-weight: 600; }
+  .node .d { font-size: 7.8pt; color: var(--muted); margin-top: 3px; line-height: 1.35; }
+  .arrow { align-self: center; color: var(--accent); font-size: 14pt; }
+  .node.final { background: rgba(123,224,194,.08); border: 1px solid rgba(123,224,194,.3); border-radius: 8px; }
+  .node.final .t { color: var(--accent2); }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 8px 0; }
+  ol, ul { margin: 6px 0 6px 18px; }
+  li { margin: 4px 0; }
+  code { font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 9pt;
+    background: #1b2128; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; color: var(--accent2); }
+  pre { background: #0e1216; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+    overflow: hidden; margin: 7px 0; }
+  pre code { background: none; border: none; padding: 0; color: var(--ink); font-size: 8.8pt; line-height: 1.5; }
+  .cols { display: flex; gap: 12px; }
+  .cols > div { flex: 1; }
+  .tag { display: inline-block; font-size: 7.5pt; font-weight: 600; letter-spacing: .5px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 20px; background: rgba(91,140,255,.12); color: var(--accent); border: 1px solid rgba(91,140,255,.25); }
+  .req { border-left: 2px solid var(--accent2); padding-left: 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  td, th { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); font-size: 9.5pt; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: .5px; }
+  td code { white-space: nowrap; }
+  footer { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 8.5pt; display: flex; justify-content: space-between; }
+  .kbd { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Pack de Skills · Claude Code</div>
+    <h1>NotebookLM Rodadas</h1>
+    <p class="sub">Extraia o contexto completo de um caderno do NotebookLM em rodadas guiadas — em vez de um prompt único que omite metade do material.</p>
+  </header>
+
+  <h2><span class="n">01</span> A ideia em 20 segundos</h2>
+  <p class="muted">Um prompt grande faz o NotebookLM resumir e pular trechos. A solução é fatiar a análise em rodadas, cada uma guiada pelo que a anterior já extraiu — sem você escrever o prompt de cada etapa.</p>
+  <div class="flow">
+    <div class="node"><div class="t">Rodada 0</div><div class="d">Mapa amplo do caderno + lista de lacunas</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="t">Rodada dirigida</div><div class="d">Aprofunda 1 frente por vez, com contexto</div></div>
+    <div class="arrow">→</div>
+    <div class="node"><div class="t">Saturação</div><div class="d">Para sozinho quando não há mais novidade</div></div>
+    <div class="arrow">→</div>
+    <div class="node final"><div class="t">contexto-*.md</div><div class="d">Um arquivo com tudo</div></div>
+  </div>
+
+  <h2><span class="n">02</span> Pré-requisito</h2>
+  <div class="panel req">
+    <p>A skill <code>notebooklm</code> precisa estar <strong>instalada e logada</strong>. Este pack não fala com o NotebookLM direto — ele orquestra essa skill.</p>
+    <p class="muted">Na primeira vez, rode <code>notebooklm login</code> no terminal para abrir o navegador e autenticar.</p>
+  </div>
+
+  <h2><span class="n">03</span> Instalação</h2>
+  <div class="cols">
+    <div>
+      <span class="tag">Opção A · Plugin (Git)</span>
+      <p class="muted" style="margin-top:6px">Instalável por qualquer pessoa, com atualizações.</p>
+      <pre><code>/plugin marketplace add &lt;url-do-repo&gt;
+/plugin install notebooklm-rodadas</code></pre>
+    </div>
+    <div>
+      <span class="tag">Opção B · Pasta</span>
+      <p class="muted" style="margin-top:6px">Copie as subpastas de <code>skills/</code> para:</p>
+      <pre><code>~/.claude/skills/contexto-perfeito/
+~/.claude/skills/rodada-zero/
+~/.claude/skills/rodada-dirigida/</code></pre>
+      <p class="muted" style="font-size:8.5pt">Windows: <code>C:\Users\&lt;você&gt;\.claude\skills\</code> · reinicie a sessão.</p>
+    </div>
+  </div>
+
+  <h2><span class="n">04</span> Como usar</h2>
+  <table>
+    <tr><th>Comando</th><th>O que faz</th></tr>
+    <tr><td><code>/contexto-perfeito</code></td><td>Fluxo completo. Pergunta o caderno e conduz todas as rodadas até saturar. <strong>Comece por aqui.</strong></td></tr>
+    <tr><td><code>/rodada-zero</code></td><td>Só o mapa inicial — cria o <code>.md</code> e lista as frentes a aprofundar.</td></tr>
+    <tr><td><code>/rodada-dirigida</code></td><td>Uma rodada de aprofundamento — repita conforme a recomendação dela.</td></tr>
+  </table>
+  <p class="muted">Presets de gabinete (MP patrimônio/habitação, MP criminal, TJ criminal, TJ cível, execução penal) dão à rodada um roteiro de perguntas próprio — e você pode criar o seu copiando um modelo em <code>presets/</code>.</p>
+
+  <h2><span class="n">05</span> Exemplo de saída</h2>
+  <pre><code># Contexto — Inquérito Civil 012/2025
+
+## Rodada 0 — Mapa inicial
+&lt;visão geral, partes, cronologia, lacunas&gt;
+
+## Rodada 1 — Linha do tempo de movimentos
+&lt;aprofundamento dirigido&gt;
+
+## Rodada 2 — Prazos e prescrição
+&lt;aprofundamento dirigido&gt;
+   ↳ contexto saturado — encerrado em 2 rodadas</code></pre>
+  <p class="muted">É esse arquivo que você cola de volta no Claude quando precisa que ele entenda o caderno inteiro.</p>
+
+  <footer>
+    <span>NotebookLM Rodadas · v1.0.0</span>
+    <span>Guia de instalação e uso</span>
+  </footer>
+
+</div>
+</body>
+</html>

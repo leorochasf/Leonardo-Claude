@@ -1,0 +1,8 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Artefatos de geração local (o PDF versionado é mantido; ignore temporários)
+*.tmp
+~$*

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "notebooklm-rodadas",
+  "version": "1.0.0",
+  "description": "Extração de contexto iterativa do Google NotebookLM em rodadas guiadas. Em vez de um prompt único (que faz o NotebookLM omitir partes), o pack fatia a análise em rodadas onde cada uma é dirigida pelo que a anterior extraiu — terminando num .md com o contexto completo do caderno.",
+  "owner": {
+    "name": "Leonardo Rocha",
+    "url": "https://github.com/leorochasf"
+  },
+  "plugins": [
+    {
+      "name": "notebooklm-rodadas",
+      "description": "Pack de skills encadeadas para análise profunda de cadernos NotebookLM em rodadas adaptativas. /contexto-perfeito roda o fluxo completo (rodada 0 + rodadas dirigidas até saturar); /rodada-zero e /rodada-dirigida podem ser usadas soltas. Requer a skill notebooklm instalada e logada.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Leonardo Rocha",
+        "url": "https://github.com/leorochasf"
+      },
+      "source": ".",
+      "category": "productivity"
+    }
+  ]
+}
